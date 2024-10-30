@@ -31,7 +31,7 @@ class Game{
         this.ctx = this.canvas.getContext("2d");
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-        this.image.src = "/image.jpg";
+        this.image.src = "../image.jpg";
         for(let i = 0; i < this.ROW; i++){
             this.fieldTab.push(new Array());
             for(let j = 0; j < this.COL; j++)
