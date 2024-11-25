@@ -1,6 +1,6 @@
 import { SpecialTile } from "./tile.js";
-import { Rectangle } from "/rectangle.js";
-import { Tile } from "/tile.js";
+import { Rectangle } from "./rectangle.js";
+import { Tile } from "./tile.js";
 
 const canvas = document.querySelector('[data-canv]');
 
