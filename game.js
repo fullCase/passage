@@ -259,7 +259,7 @@ class Game{
 
 		});
 
-		this.IMAGE.src = "image.jpg";
+		this.IMAGE.src = "./image.jpg";
 	}
 
 
