@@ -1,4 +1,4 @@
-import { Rectangle } from "/rectangle.js";
+import { Rectangle } from "./rectangle.js";
 
 export class Tile extends Rectangle{
    SPECIALBLOK = false;
