@@ -1,4 +1,4 @@
-class Player {
+export class Player {
     #FIRST_CONFIG ={
         NAME: "PLAYER", 
         LIVE: 10,
@@ -42,6 +42,10 @@ class Player {
 
     getPoint = () => {
         return this.Score;
+    }
+
+    getHighPoint = () => {
+        return this.HighScore;
     }
 
     getLive = () => {
