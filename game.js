@@ -201,16 +201,16 @@ class Game{
         this.SecondField = this.createFieldShape(this.TilesField.getPositionX(), this.TilesField.getPositionY() + this.TilesField.getSizeY(), this.TilesField.getSizeX(), this.canvas.height - (this.TilesField.getPositionY() + this.TilesField.getSizeY()), undefined, undefined, "white");
         this.SecondField.draw();
 
-        this.TimeField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() / 8 - this.SideSize / 2, this.SecondField.getPositionY() + this.SecondField.getSizeY() / 5, this.SideSize, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
+       	this.TimeField = this.createFieldShape(this.SecondField.getPositionX() + this.STROKE * 2, this.SecondField.getPositionY() + + this.STROKE * 2, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
 		
+        this.LiveField = this.createFieldShape(this.SecondField.getPositionX() + this.STROKE * 2, this.SecondField.getPositionY() + this.SideSize, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
 
-        this.LiveField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() / 8 - this.SideSize / 2, this.SecondField.getPositionY() + this.SecondField.getSizeY() / 2, this.SideSize, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
+        this.ScoreField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() - this.SideSize * 2 - + this.STROKE * 2, this.SecondField.getPositionY() + + this.STROKE * 2, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
 
-        this.ScoreField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() - this.SideSize * 2.2, this.SecondField.getPositionY() + this.SecondField.getSizeY() / 5, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
+        this.HighScoreField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() - this.SideSize * 2 - + this.STROKE * 2, this.SecondField.getPositionY() + this.SideSize, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
 
-        this.HighScoreField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() - this.SideSize * 2.2, this.SecondField.getPositionY() + this.SecondField.getSizeY() / 2, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
-
-        this.CurrentTileField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() / 2 - this.SideSize / 2, this.SecondField.getPositionY() + this.SecondField.getSizeY() / 2 - this.SideSize / 2, this.SideSize, this.SideSize, this.STROKE, this.GOLDEN, "white");
+        this.CurrentTileField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() / 2 - this.SideSize / 2, this.SecondField.getPositionY() + this.SideSize / 3, this.SideSize, this.SideSize, this.STROKE, this.GOLDEN, "white");
+        this.CurrentTileField.draw();
         this.CurrentTileField.draw();
 
 		for(let i = 0; i < this.COL; i++){
@@ -267,14 +267,14 @@ class Game{
 
 			this.ctx.fillStyle = "black";
         	this.ctx.font = "30px serif";
+			
+		this.ctx.fillText(this.PLAYER.getTime(), this.TimeField.getPositionX() + this.TimeField.getStrokeSize(), this.TimeField.getPositionY() + this.TimeField.getSizeY() - this.STROKE);
 
-        	this.ctx.fillText(this.PLAYER.getTime(), this.TimeField.getPositionX() + this.STROKE, this.TimeField.getPositionY() + this.TimeField.getSizeY() - this.STROKE);
+        	this.ctx.fillText(this.PLAYER.getLive(), this.LiveField.getPositionX() + this.LiveField.getStrokeSize(), this.LiveField.getPositionY() + this.LiveField.getSizeY() - this.STROKE);
 
-        	this.ctx.fillText(this.PLAYER.getLive(), this.LiveField.getPositionX() + this.STROKE, this.LiveField.getPositionY() + this.LiveField.getSizeY() - this.STROKE);
+        	this.ctx.fillText(this.PLAYER.getPoint(),this.ScoreField.getPositionX() + this.ScoreField.getStrokeSize(), this.ScoreField.getPositionY() + this.ScoreField.getSizeY() - this.STROKE);
 
-        	this.ctx.fillText(this.PLAYER.getPoint(), this.ScoreField.getPositionX() + this.STROKE, this.ScoreField.getPositionY() + this.ScoreField.getSizeY() - this.STROKE);
-
-        	this.ctx.fillText(this.PLAYER.getHighPoint(), this.HighScoreField.getPositionX() + this.STROKE, this.HighScoreField.getPositionY() + this.HighScoreField.getSizeY() - this.STROKE);
+        	this.ctx.fillText(this.PLAYER.getHighPoint(),this.HighScoreField.getPositionX() + this.HighScoreField.getStrokeSize(), this.HighScoreField.getPositionY() + this.HighScoreField.getSizeY() - this.STROKE);
             
 		});
 		this.IMAGE.src = "image.jpg";
