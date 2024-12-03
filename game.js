@@ -26,11 +26,13 @@ class Game{
 	ScoreField = Object; 
 	HighScoreField = Object; 
 
+	once = true;
+
     constructor(canvas){         // <--- Game class costructor
 		this.canvas = canvas;
 		this.ctx = this.canvas.getContext("2d");
-		this.canvas.width = window.screen.width;
-        this.canvas.height = screen.height;
+		this.canvas.width = window.screen.availWidth;
+        this.canvas.height = window.screen.availHeight;
     }
 
    /////////////////////////////////////////////////////////////////////////////////
@@ -188,6 +190,51 @@ class Game{
 
 	///////////////////////////////////////////////////////////////////////////////////
 
+	resetFieldTab = () => {
+		for(let i = 0; i < this.COL; i++){
+			for(let j = 0; j < this.ROW; j++)
+				this.FieldTab[i].splice(j, 1, 0);
+        }
+	}
+
+	reset = () =>{
+		this.resetFieldTab();
+
+		let r1 = this.random(4, 2) * this.SideSize;
+		let r2 =  this.random(4, 4) * this.SideSize;
+
+		this.CurrentTile = new SpecialTile(this.ctx, r1, r2, this.SideSize); // <=-- Create again a first tile to restart a game
+        this.CurrentTile.setColors(true);
+        this.save(r1, r2, this.CurrentTile);
+
+		this.createNextTile(this.CurrentTileField.getPositionX(), this.CurrentTileField.getPositionY());
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+
+	time = () =>{
+		function pad(unit){
+			return (("0") + unit).length > 2 ? unit : "0" + unit; 
+		}
+		this.TimeField.clear();
+
+		this.TimeField.draw();
+
+		this.ctx.fillStyle = "black";
+        this.ctx.font = "25px Serif";
+		
+		let hour = Math.floor(this.PLAYER.getTime() / 3600);
+		let min = Math.floor(this.PLAYER.getTime() / 60);
+		let sec = Math.floor(this.PLAYER.getTime() % 60);
+
+		hour = pad(hour);
+		min = pad(min);
+		sec = pad(sec);
+		
+		let str = `${hour}:${min}:${sec}`;
+
+		this.ctx.fillText(str, this.TimeField.getPositionX() + this.TimeField.getStrokeSize(), this.TimeField.getPositionY() + this.TimeField.getSizeY() - this.STROKE);
+	}
 	//////////////////////////////////////////////////////////////////////////////////
 
     start = () =>{	
@@ -196,12 +243,18 @@ class Game{
 		let r1 = this.random(4, 2) * this.SideSize;
 		let r2 =  this.random(4, 4) * this.SideSize;
 
+		for(let i = 0; i < this.COL; i++){
+            this.FieldTab.push(new Array());
+			for(let j = 0; j < this.ROW; j++)
+				this.FieldTab[i].push(0);
+        }
+
         this.TilesField = this.createFieldShape(0, 0, this.SideSize * this.ROW, this.SideSize * this.COL, this.STROKE, this.GOLDEN);
 
         this.SecondField = this.createFieldShape(this.TilesField.getPositionX(), this.TilesField.getPositionY() + this.TilesField.getSizeY(), this.TilesField.getSizeX(), this.canvas.height - (this.TilesField.getPositionY() + this.TilesField.getSizeY()), undefined, undefined, "white");
         this.SecondField.draw();
 
-       	this.TimeField = this.createFieldShape(this.SecondField.getPositionX() + this.STROKE * 2, this.SecondField.getPositionY() + + this.STROKE * 2, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
+        this.TimeField = this.createFieldShape(this.SecondField.getPositionX() + this.STROKE * 2, this.SecondField.getPositionY() + + this.STROKE * 2, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
 		
         this.LiveField = this.createFieldShape(this.SecondField.getPositionX() + this.STROKE * 2, this.SecondField.getPositionY() + this.SideSize, this.SideSize * 2, this.SideSize / 2, this.STROKE, this.GOLDEN, "white");
 
@@ -211,13 +264,6 @@ class Game{
 
         this.CurrentTileField = this.createFieldShape(this.SecondField.getPositionX() + this.SecondField.getSizeX() / 2 - this.SideSize / 2, this.SecondField.getPositionY() + this.SideSize / 3, this.SideSize, this.SideSize, this.STROKE, this.GOLDEN, "white");
         this.CurrentTileField.draw();
-        this.CurrentTileField.draw();
-
-		for(let i = 0; i < this.COL; i++){
-            this.FieldTab.push(new Array());
-			for(let j = 0; j < this.ROW; j++)
-				this.FieldTab[i].push(0);
-        }
 
         this.CurrentTile = new SpecialTile(this.ctx, r1, r2, this.SideSize); // <=-- Create a first tile to start a game
         this.CurrentTile.setColors(true);
@@ -234,7 +280,6 @@ class Game{
     update = () =>{
 		this.IMAGE.addEventListener("load", () =>{
 			this.TilesField.clear();
-			this.TimeField.clear();
 			this.LiveField.clear();
 			this.ScoreField.clear();
 			this.HighScoreField.clear();
@@ -266,23 +311,47 @@ class Game{
 			this.CurrentTile.draw();
 
 			this.ctx.fillStyle = "black";
-        	this.ctx.font = "30px serif";
-			
-		this.ctx.fillText(this.PLAYER.getTime(), this.TimeField.getPositionX() + this.TimeField.getStrokeSize(), this.TimeField.getPositionY() + this.TimeField.getSizeY() - this.STROKE);
+        	this.ctx.font = "28px Serif";
 
         	this.ctx.fillText(this.PLAYER.getLive(), this.LiveField.getPositionX() + this.LiveField.getStrokeSize(), this.LiveField.getPositionY() + this.LiveField.getSizeY() - this.STROKE);
 
         	this.ctx.fillText(this.PLAYER.getPoint(),this.ScoreField.getPositionX() + this.ScoreField.getStrokeSize(), this.ScoreField.getPositionY() + this.ScoreField.getSizeY() - this.STROKE);
 
         	this.ctx.fillText(this.PLAYER.getHighPoint(),this.HighScoreField.getPositionX() + this.HighScoreField.getStrokeSize(), this.HighScoreField.getPositionY() + this.HighScoreField.getSizeY() - this.STROKE);
-            
+
+			this.ctx.fillStyle = "white";
+			this.ctx.font = "14px Serif";
+
+			this.ctx.fillText("TIME", this.TimeField.getPositionX() + this.TimeField.getStrokeSize(), this.TimeField.getPositionY() + this.TimeField.getSizeY() + 14);
+			this.ctx.fillText("LIVE", this.LiveField.getPositionX() + this.LiveField.getStrokeSize(), this.LiveField.getPositionY() + this.LiveField.getSizeY() + 14);
+			this.ctx.fillText("SCORE",this.ScoreField.getPositionX() + this.ScoreField.getStrokeSize(), this.ScoreField.getPositionY() + this.ScoreField.getSizeY() + 14);
+			this.ctx.fillText("HIGH SCORE",this.HighScoreField.getPositionX() + this.HighScoreField.getStrokeSize(), this.HighScoreField.getPositionY() + this.HighScoreField.getSizeY() + 14);
+
+			this.ctx.fillStyle = "black";
+
+			this.ctx.fillText("TIME", this.TimeField.getPositionX() + this.TimeField.getStrokeSize(), this.TimeField.getPositionY() + this.TimeField.getSizeY() + 14);
+			this.ctx.fillText("LIVE", this.LiveField.getPositionX() + this.LiveField.getStrokeSize(), this.LiveField.getPositionY() + this.LiveField.getSizeY() + 14);
+			this.ctx.fillText("SCORE",this.ScoreField.getPositionX() + this.ScoreField.getStrokeSize(), this.ScoreField.getPositionY() + this.ScoreField.getSizeY() + 14);
+			this.ctx.fillText("HIGH SCORE",this.HighScoreField.getPositionX() + this.HighScoreField.getStrokeSize(), this.HighScoreField.getPositionY() + this.HighScoreField.getSizeY() + 14);
+			
 		});
 		this.IMAGE.src = "image.jpg";
+		
 	}
 
     //////////////////////////////////////////////////////////////////////////////////////
 
 	play = () =>{
+		if(this.once){
+			this.start();
+			this.once = false;
+		}
+
+		setInterval(() => {
+			this.PLAYER.addTime();
+			this.time();
+		}, 1000);
+
 		this.canvas.addEventListener("click", (e) =>{
 			let x = e.clientX - this.canvas.getBoundingClientRect().left;
 			let y = e.clientY - this.canvas.getBoundingClientRect().top;
@@ -293,15 +362,14 @@ class Game{
 					this.createNextTile(this.CurrentTileField.getPositionX(), this.CurrentTileField.getPositionY());
 					this.checkLine();
 					this.update();
-                    console.log(this.PLAYER.getPoint());
 				}
 				else{
 					this.PLAYER.deductLive();
-
 					if(this.PLAYER.getLive() == 0){
 						this.PLAYER.reset();
+						this.reset();
+						this.update();
 					}
-
 					this.update();
 				}
 				
@@ -312,6 +380,6 @@ class Game{
 
 
 let game = new Game(canvas);
-game.start();
+
 game.play();
 
