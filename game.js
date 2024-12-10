@@ -31,8 +31,8 @@ class Game{
     constructor(canvas){         // <--- Game class costructor
 		this.canvas = canvas;
 		this.ctx = this.canvas.getContext("2d");
-		this.canvas.width = window.screen.availWidth;
-        this.canvas.height = window.screen.availHeight;
+		this.canvas.width = document.body.clientWidth;
+        	this.canvas.height = document.body.clientHeight;
     }
 
    /////////////////////////////////////////////////////////////////////////////////
