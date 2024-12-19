@@ -326,8 +326,8 @@ export class Game{
 			FillText(this.ctx, this.TimeField, this.LiveField, this.ScoreField, this.HighScoreField, this.FONT_SIZE_TEXT);
 
  		});
-		
-		this.IMAGE.src = "./image.jpg";
+		this.IMAGE.src = "./img01.jpg";
+		// this.IMAGE.src = "./image.jpg";
 		// this.IMAGE.src = "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg";
 
 	}
